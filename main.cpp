@@ -359,7 +359,16 @@ void draw_image(const char* filename){
     SDL_DestroyTexture(texture);
     SDL_RenderPresent(renderer);
 }
-
+void music(){
+    Mix_Music* music = nullptr;
+    music = Mix_LoadMUS("pictures/Coffin_Dance.mp3");
+    Mix_PlayMusic(music, -1);
+}
+void effect(){
+    Mix_Chunk* chunk = nullptr;
+    chunk = Mix_LoadWAV("pictures/OMG.wav");
+    Mix_PlayChannel(-1, chunk, 0);
+}
 int main( int argc, char* argv[])
 {
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -380,7 +389,9 @@ int main( int argc, char* argv[])
         cout << "failed to initialized TTF " << SDL_GetError() << endl;
         return -1;
     }
-
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0){
+        cout << " failed to load music " << endl;
+    }
     int tries = 8; // so lan doan
     bool correct_guess = false;
     bool isRunning = true;
@@ -395,6 +406,7 @@ int main( int argc, char* argv[])
     bool waitEvent =true;
 
     while(isRunning){
+        music();
         draw_text(mystery_word.c_str(), mystery_rect, renderer);
         SDL_RenderPresent(renderer);
         waitUntilKeyPressed(word, mystery_word, correct_guess, mystery_rect, renderer);
@@ -414,43 +426,49 @@ int main( int argc, char* argv[])
                 {
                     draw_image("pictures/hang.png");
                     draw_text("6", tries_rect, renderer);
+                    effect();
                     break;
                 }
                 case 6:
                 {
                     draw_image("pictures/hang_head.png");
                     draw_text("5", tries_rect, renderer);
+                    effect();
                     break;
                 }
                 case 5:
                 {
                     draw_image("pictures/hang_body.png");
                     draw_text("4", tries_rect, renderer);
+                    effect();
                     break;
                 }
                 case 4:
                 {
                     draw_image("pictures/hang_leftarm.png");
                     draw_text("3", tries_rect, renderer);
-
+                    effect();
                     break;
                 }
                 case 3:
                 {
                     draw_image("pictures/hang_rightarm.png");
                     draw_text("2", tries_rect, renderer);
+                    effect();
                     break;
                 }
                 case 2:
                 {
                     draw_image("pictures/hang_leftleg.png");
                     draw_text("1", tries_rect, renderer);
+                    effect();
                     break;
                 }
                 case 1:
                 {
                     draw_image("pictures/hang_rightleg.png");
                     draw_text("0", tries_rect, renderer);
+                    effect();
                     tries = 0;
                     break;
                 }
