@@ -24,7 +24,7 @@ void draw_text(const char* msg, SDL_Rect rect, SDL_Renderer* ren){
     SDL_FreeSurface(sur);
     SDL_DestroyTexture(tex);
 }
-void waitUntilKeyPressed(string word, string &mystery_word,bool correct_guess,SDL_Rect mystery_rect, SDL_Renderer* ren){
+void waitUntilKeyPressed(string word, string &mystery_word, bool &correct_guess, SDL_Rect mystery_rect, SDL_Renderer* ren){
     SDL_Event e;
     bool wait =true;
     while (wait) {
@@ -386,11 +386,11 @@ int main( int argc, char* argv[])
         return -1;
     }
     if(TTF_Init() < 0){
-        cout << "failed to initialized TTF " << SDL_GetError() << endl;
+        cout << "failed to initialized TTF " << TTF_GetError() << endl;
         return -1;
     }
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0){
-        cout << " failed to load music " << endl;
+        cout << " failed to load music " << Mix_GetError() << endl;
     }
     int tries = 8; // so lan doan
     bool correct_guess = false;
