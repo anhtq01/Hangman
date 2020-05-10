@@ -368,29 +368,7 @@ void effect(){
     Mix_PlayChannel(-1, chunk, 0);
 }
 
-int game()
-{
-    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
-        cout << " failed to initialized SDL " << SDL_GetError() << endl;
-        return -1;
-    }
-    window = SDL_CreateWindow(" A VERY NEW GAME ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-    if(window == nullptr){
-        cout << " failed to create window " << SDL_GetError() << endl;
-        return -1;
-    }
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if(renderer == nullptr){
-        cout << "failed to create renderer " << SDL_GetError() << endl;
-        return -1;
-    }
-    if(TTF_Init() < 0){
-        cout << "failed to initialized TTF " << SDL_GetError() << endl;
-        return -1;
-    }
-    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0){
-        cout << " failed to load music " << endl;
-    }
+void game(){
     int tries = 8; // so lan doan
     bool correct_guess = false;
     bool isRunning = true;
@@ -480,8 +458,6 @@ int game()
 
             }
         }
-
-    return 0;
 }
 bool ask(){ // choi nhieu lan
     SDL_Event e;
@@ -504,6 +480,27 @@ bool ask(){ // choi nhieu lan
 }
 
 int main(int argc, char* atgv[]){
+    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
+        cout << " failed to initialized SDL " << SDL_GetError() << endl;
+        return -1;
+    }
+    window = SDL_CreateWindow(" A VERY NEW GAME ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+    if(window == nullptr){
+        cout << " failed to create window " << SDL_GetError() << endl;
+        return -1;
+    }
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if(renderer == nullptr){
+        cout << "failed to create renderer " << SDL_GetError() << endl;
+        return -1;
+    }
+    if(TTF_Init() != 0){
+        cout << "failed to initialized TTF " << SDL_GetError() << endl;
+        return -1;
+    }
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0){
+        cout << " failed to load music " << endl;
+    }
     bool play_again = true;
     do{
         game();
