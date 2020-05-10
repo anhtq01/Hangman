@@ -44,10 +44,11 @@ class UnknownWord
         };
         return word_list[random];
     }
-    string m_word = secret_word();
+        string m_word = secret_word();
     protected:
 
     private:
+
 };
 
 #endif // UNKNOWNWORD_H
