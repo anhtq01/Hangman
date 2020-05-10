@@ -376,7 +376,6 @@ void Engine::game()
                 if(word == mystery_word){
                     draw_image("pictures/passed.png");
                     music("pictures/congratulation.mp3");
-                    SDL_Delay(3000);
                     break;
                 }
                 if(correct_guess == false){
