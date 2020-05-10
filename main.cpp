@@ -10,9 +10,7 @@ const int SCREEN_HEIGHT = 600;
 
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
-SDL_Surface* surface = nullptr;
-SDL_Texture* texture = nullptr;
-SDL_Event event;
+
 void draw_text(const char* msg, SDL_Rect rect, SDL_Renderer* ren){
     TTF_Font* font = TTF_OpenFont("JOKERMAN.ttf", 50);
 
@@ -351,8 +349,8 @@ void waitUntilKeyPressed(string word, string &mystery_word, bool &correct_guess,
     }
 }
 void draw_image(const char* filename){
-    surface = IMG_Load(filename);
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Surface* surface = IMG_Load(filename);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -369,7 +367,7 @@ void effect(){
     chunk = Mix_LoadWAV("pictures/OMG.wav");
     Mix_PlayChannel(-1, chunk, 0);
 }
-int main( int argc, char* argv[])
+int game()
 {
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
         cout << " failed to initialized SDL " << SDL_GetError() << endl;
@@ -386,11 +384,11 @@ int main( int argc, char* argv[])
         return -1;
     }
     if(TTF_Init() < 0){
-        cout << "failed to initialized TTF " << TTF_GetError() << endl;
+        cout << "failed to initialized TTF " << SDL_GetError() << endl;
         return -1;
     }
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0){
-        cout << " failed to load music " << Mix_GetError() << endl;
+        cout << " failed to load music " << endl;
     }
     int tries = 8; // so lan doan
     bool correct_guess = false;
@@ -401,16 +399,15 @@ int main( int argc, char* argv[])
     string mystery_word(word.length(), '*');
 
     draw_image("pictures/background.png");
-    SDL_Rect mystery_rect = {400,100,100,60};
-    SDL_Rect tries_rect = {700, 100, 60, 60};
+    SDL_Rect mystery_rect = {500,100,100,60};
+    SDL_Rect tries_rect = {740, 20, 60, 60};
     bool waitEvent =true;
-
     while(isRunning){
         music();
+        correct_guess = false; // reset bool
         draw_text(mystery_word.c_str(), mystery_rect, renderer);
         SDL_RenderPresent(renderer);
         waitUntilKeyPressed(word, mystery_word, correct_guess, mystery_rect, renderer);
-        correct_guess = false; // reset bool
 
         if(word == mystery_word){
                 draw_image("pictures/passed.png");
@@ -472,17 +469,42 @@ int main( int argc, char* argv[])
                     tries = 0;
                     break;
                 }
-                default:
-                    cout << "if this line appear, the program has bugs !" << endl;
                 }
+                if(tries == 0){
+                    draw_image("pictures/wasted.png");
+                    isRunning = false;
 
-            if(tries == 0){
-                draw_image("pictures/wasted.png");
-                SDL_Delay(3000);
-                isRunning = false;
             }
         }
 
+    return 0;
+}
+bool ask(){
+    SDL_Event e;
+    bool wait =true;
+    while (wait) {
+        if (SDL_WaitEvent(&e) != 0)
+        {   if (e.type == SDL_KEYDOWN){
+                switch(e.key.keysym.sym)
+                {
+                    case SDLK_1:{
+                        return true;
+                    }
+                    case SDLK_0:{
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main(int argc, char* argv[]){
+    bool play_again = true;
+    do{
+        game();
+        play_again = ask();
+    } while (play_again);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     Mix_Quit();
