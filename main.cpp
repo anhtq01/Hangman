@@ -367,6 +367,7 @@ void effect(){
     chunk = Mix_LoadWAV("pictures/OMG.wav");
     Mix_PlayChannel(-1, chunk, 0);
 }
+
 int game()
 {
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -398,13 +399,16 @@ int game()
     string word = obj.m_word ;
     string mystery_word(word.length(), '*');
 
-    draw_image("pictures/background.png");
+    SDL_Rect rule_rect = {50, 300, 700, 60};
     SDL_Rect mystery_rect = {500,100,100,60};
     SDL_Rect tries_rect = {740, 20, 60, 60};
-    bool waitEvent =true;
+
+    draw_image("pictures/background.png");
+    draw_text("press any key to start, press 1 to play again, 0 to quit play again", rule_rect, renderer);
+
     while(isRunning){
         music();
-        correct_guess = false; // reset bool
+        correct_guess = false;
         draw_text(mystery_word.c_str(), mystery_rect, renderer);
         SDL_RenderPresent(renderer);
         waitUntilKeyPressed(word, mystery_word, correct_guess, mystery_rect, renderer);
@@ -479,7 +483,7 @@ int game()
 
     return 0;
 }
-bool ask(){
+bool ask(){ // choi nhieu lan
     SDL_Event e;
     bool wait =true;
     while (wait) {
@@ -499,7 +503,7 @@ bool ask(){
     }
 }
 
-int main(int argc, char* argv[]){
+int main(int argc, char* atgv[]){
     bool play_again = true;
     do{
         game();
