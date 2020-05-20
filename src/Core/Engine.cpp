@@ -372,6 +372,7 @@ void Engine::game()
                 draw_text(mystery_word.c_str(), mystery_rect, renderer);
                 SDL_RenderPresent(renderer);
                 waitUntilKeyPressed(word, mystery_word, correct_guess, mystery_rect, renderer);
+                SDL_Delay(150);
 
                 if(word == mystery_word){
                     draw_image("pictures/passed.png");
@@ -423,6 +424,7 @@ void Engine::game()
                         draw_image("pictures/hang_rightleg.png");
                         draw_text("0", tries_rect, renderer);
                         effect();
+                        SDL_Delay(2000);
                         tries = 0;
                         break;
                     }
